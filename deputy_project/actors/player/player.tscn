@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://bbsjjf1cs1i6s"]
+
+[ext_resource type="Script" uid="uid://b3j7y2qbor4co" path="res://actors/player/player.gd" id="1_ilk7j"]
+[ext_resource type="PackedScene" uid="uid://wcgvpvwq782d" path="res://assets/test_assets/base_character.gltf" id="2_ax26v"]
+[ext_resource type="Script" uid="uid://svlo13yss5vf" path="res://actors/player/cam.gd" id="3_ax26v"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lsqbn"]
+radius = 0.15
+height = 1.6
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_ilk7j"]
+frustum_focal_length = 20.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ax26v"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lsqbn"]
+animation = &"Run"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_6p1w3"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_15y17"]
+graph_offset = Vector2(-462.314, 89.7108)
+nodes/Idle/node = SubResource("AnimationNodeAnimation_ax26v")
+nodes/Idle/position = Vector2(-280, 140)
+nodes/Run/node = SubResource("AnimationNodeAnimation_lsqbn")
+nodes/Run/position = Vector2(-280, 280)
+nodes/RunBlend/node = SubResource("AnimationNodeBlend2_6p1w3")
+nodes/RunBlend/position = Vector2(-40, 160)
+node_connections = [&"RunBlend", 0, &"Idle", &"RunBlend", 1, &"Run", &"output", 0, &"RunBlend"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_ilk7j")
+
+[node name="base_character" parent="." instance=ExtResource("2_ax26v")]
+top_level = true
+
+[node name="AnimationPlayer" parent="base_character" index="1"]
+autoplay = "Idle"
+
+[node name="ClimbRay" type="RayCast3D" parent="base_character"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -0.35)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_lsqbn")
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
+script = ExtResource("3_ax26v")
+min_arm_length = 1.0
+max_arm_length = 3.2
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Node3D"]
+spring_length = 2.3
+
+[node name="Camera3D" type="Camera3D" parent="Node3D/SpringArm3D"]
+attributes = SubResource("CameraAttributesPhysical_ilk7j")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../base_character")
+tree_root = SubResource("AnimationNodeBlendTree_15y17")
+anim_player = NodePath("../base_character/AnimationPlayer")
+parameters/RunBlend/blend_amount = 1.0
+
+[editable path="base_character"]

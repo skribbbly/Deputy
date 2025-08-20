@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://dfar43u6ar1yl"]
+
+[ext_resource type="Texture2D" uid="uid://b3y88cyqxkqq" path="res://assets/test_textures/black/texture_01.png" id="1_qhdi5"]
+[ext_resource type="Texture2D" uid="uid://c60rfsxpe26mw" path="res://assets/test_textures/texture_01_normal.png" id="2_ag7ef"]
+[ext_resource type="PackedScene" uid="uid://bbsjjf1cs1i6s" path="res://actors/player/player.tscn" id="3_eyrtm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tbd4o"]
+albedo_texture = ExtResource("1_qhdi5")
+roughness = 0.63
+normal_enabled = true
+normal_scale = 3.0
+normal_texture = ExtResource("2_ag7ef")
+uv1_triplanar = true
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+shadow_bias = 0.022
+directional_shadow_pancake_size = 0.0
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -822.5, 0)
+size = Vector3(32, 1645, 32)
+material = SubResource("StandardMaterial3D_tbd4o")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.425, -5.25)
+size = Vector3(16, 0.85, 4.5)
+material = SubResource("StandardMaterial3D_tbd4o")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.25, 1.275, -5.25)
+size = Vector3(11.5, 0.85, 4.5)
+material = SubResource("StandardMaterial3D_tbd4o")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, -966.75, 5.5)
+size = Vector3(8.5, 1938.5, 22)
+material = SubResource("StandardMaterial3D_tbd4o")
+
+[node name="Player" parent="." instance=ExtResource("3_eyrtm")]
