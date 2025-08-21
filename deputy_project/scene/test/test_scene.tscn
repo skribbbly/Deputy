@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dfar43u6ar1yl"]
+[gd_scene load_steps=6 format=3 uid="uid://dfar43u6ar1yl"]
 
 [ext_resource type="Texture2D" uid="uid://b3y88cyqxkqq" path="res://assets/test_textures/black/texture_01.png" id="1_qhdi5"]
 [ext_resource type="Texture2D" uid="uid://c60rfsxpe26mw" path="res://assets/test_textures/texture_01_normal.png" id="2_ag7ef"]
 [ext_resource type="PackedScene" uid="uid://bbsjjf1cs1i6s" path="res://actors/player/player.tscn" id="3_eyrtm"]
+[ext_resource type="PackedScene" uid="uid://dgtbdg2c7w20a" path="res://game_elements/test_target.tscn" id="4_ag7ef"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tbd4o"]
 albedo_texture = ExtResource("1_qhdi5")
@@ -44,3 +45,6 @@ size = Vector3(8.5, 1938.5, 22)
 material = SubResource("StandardMaterial3D_tbd4o")
 
 [node name="Player" parent="." instance=ExtResource("3_eyrtm")]
+
+[node name="TestTarget" parent="." instance=ExtResource("4_ag7ef")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78911, 1.55684, 6.55897)

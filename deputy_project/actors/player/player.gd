@@ -19,6 +19,8 @@ var grav : Vector3
 @onready var mesh := $base_character
 @onready var anim := $AnimationTree
 @onready var climbray: RayCast3D = $base_character/ClimbRay
+@onready var col: CollisionShape3D = $CollisionShape3D
+
 
 
 func _process(delta: float) -> void:
@@ -28,6 +30,8 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_pressed("esc"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
+	print("FPS: ", Engine.get_frames_per_second())
 
 func _physics_process(delta: float) -> void:
 	var h_rot = global_transform.basis.get_euler().y
@@ -44,13 +48,16 @@ func _physics_process(delta: float) -> void:
 	
 	if !is_on_floor():
 		grav.y -= 9.8 * delta
-		
+		anim.set("parameters/AirSwamp/transition_request", "Air")
+		col.shape.height = 1.1
 		if climbray.is_colliding():
 			if Input.is_action_just_pressed("space"):
 				global_position = climbray.get_collision_point()
 		
 	else:
 		grav.y = 0
+		anim.set("parameters/AirSwamp/transition_request", "Ground")
+		col.shape.height = 1.6
 		if Input.is_action_just_pressed("space"):
 			if climbray.is_colliding():
 				global_position = climbray.get_collision_point()

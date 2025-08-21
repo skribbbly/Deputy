@@ -1,0 +1,83 @@
+[gd_scene load_steps=5 format=3 uid="uid://dh3by2pr2rcw1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mt5fd"]
+shading_mode = 0
+albedo_color = Color(0.976563, 0.748128, 0.141144, 1)
+
+[sub_resource type="Animation" id="Animation_bk4sk"]
+resource_name = "TargetIndicatorSpin"
+length = 0.533337
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCylinder3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.533333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 3.14159), Vector3(0, 3.14159, 3.14159), Vector3(0, 6.28319, 3.14159)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CSGCylinder3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.266667, 0.533333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(7.10816e-08, 0.894922, 0), Vector3(2.57829e-08, 0.594922, 0), Vector3(-4.43954e-10, 0.894922, 4.58565e-15)]
+}
+
+[sub_resource type="Animation" id="Animation_ki8ys"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCylinder3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 3.14159)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CSGCylinder3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(2.57829e-08, 0.594922, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xl57k"]
+_data = {
+&"RESET": SubResource("Animation_ki8ys"),
+&"TargetIndicatorSpin": SubResource("Animation_bk4sk")
+}
+
+[node name="TargetIndicator" type="Node3D"]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="."]
+transform = Transform3D(-1, -1.50996e-07, 0, 1.50996e-07, -1, 0, 0, 0, 1, 2.57829e-08, 0.594922, 0)
+radius = 0.2
+height = 0.272656
+sides = 4
+cone = true
+material = SubResource("StandardMaterial3D_mt5fd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_xl57k")
+}
+autoplay = "TargetIndicatorSpin"

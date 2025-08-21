@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbsjjf1cs1i6s"]
+[gd_scene load_steps=14 format=3 uid="uid://bbsjjf1cs1i6s"]
 
 [ext_resource type="Script" uid="uid://b3j7y2qbor4co" path="res://actors/player/player.gd" id="1_ilk7j"]
 [ext_resource type="PackedScene" uid="uid://wcgvpvwq782d" path="res://assets/test_assets/base_character.gltf" id="2_ax26v"]
 [ext_resource type="Script" uid="uid://svlo13yss5vf" path="res://actors/player/cam.gd" id="3_ax26v"]
+[ext_resource type="Script" uid="uid://cvdpjsbvfevfx" path="res://actors/player/targeting_area.gd" id="4_lsqbn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lsqbn"]
 radius = 0.15
@@ -11,29 +12,61 @@ height = 1.6
 [sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_ilk7j"]
 frustum_focal_length = 20.0
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lsqbn"]
+height = 4.025
+radius = 11.9
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6p1w3"]
+animation = &"Air"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_15y17"]
+xfade_time = 0.1
+input_0/name = "Ground"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "Air"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ax26v"]
 animation = &"Idle"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lsqbn"]
 animation = &"Run"
 
-[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_6p1w3"]
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_ax26v"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_15y17"]
-graph_offset = Vector2(-462.314, 89.7108)
+graph_offset = Vector2(-586.334, 35.9252)
+nodes/Air/node = SubResource("AnimationNodeAnimation_6p1w3")
+nodes/Air/position = Vector2(-260, 280)
+nodes/AirSwamp/node = SubResource("AnimationNodeTransition_15y17")
+nodes/AirSwamp/position = Vector2(80, 140)
 nodes/Idle/node = SubResource("AnimationNodeAnimation_ax26v")
-nodes/Idle/position = Vector2(-280, 140)
+nodes/Idle/position = Vector2(-540, 20)
 nodes/Run/node = SubResource("AnimationNodeAnimation_lsqbn")
-nodes/Run/position = Vector2(-280, 280)
-nodes/RunBlend/node = SubResource("AnimationNodeBlend2_6p1w3")
-nodes/RunBlend/position = Vector2(-40, 160)
-node_connections = [&"RunBlend", 0, &"Idle", &"RunBlend", 1, &"Run", &"output", 0, &"RunBlend"]
+nodes/Run/position = Vector2(-540, 160)
+nodes/RunBlend/node = SubResource("AnimationNodeBlend2_ax26v")
+nodes/RunBlend/position = Vector2(-280, 40)
+node_connections = [&"AirSwamp", 0, &"RunBlend", &"AirSwamp", 1, &"Air", &"RunBlend", 0, &"Idle", &"RunBlend", 1, &"Run", &"output", 0, &"AirSwamp"]
 
 [node name="Player" type="CharacterBody3D"]
+collision_layer = 2
 script = ExtResource("1_ilk7j")
 
 [node name="base_character" parent="." instance=ExtResource("2_ax26v")]
 top_level = true
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="base_character/Armature/Skeleton3D" index="3"]
+transform = Transform3D(-0.824441, -0.0688922, 0.561739, -0.245087, -0.851203, -0.464096, 0.510127, -0.520295, 0.684882, 0.253404, 0.701153, -0.226402)
+bone_name = "DEF-hand.R"
+bone_idx = 18
+
+[node name="Sword" type="CSGBox3D" parent="base_character/Armature/Skeleton3D/BoneAttachment3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47847e-08, 0.0445958, -0.401157)
+size = Vector3(0.04, 0.04, 1)
 
 [node name="AnimationPlayer" parent="base_character" index="1"]
 autoplay = "Idle"
@@ -44,6 +77,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -0.35)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_lsqbn")
+debug_color = Color(1, 1, 1, 1)
 
 [node name="Node3D" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
@@ -57,10 +91,27 @@ spring_length = 2.3
 [node name="Camera3D" type="Camera3D" parent="Node3D/SpringArm3D"]
 attributes = SubResource("CameraAttributesPhysical_ilk7j")
 
+[node name="RayCast3D" type="RayCast3D" parent="Node3D/SpringArm3D/Camera3D"]
+target_position = Vector3(0, 0, -23.5)
+
+[node name="Area3D" type="Area3D" parent="Node3D/SpringArm3D"]
+script = ExtResource("4_lsqbn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/SpringArm3D/Area3D"]
+transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 0, 0, 0, -11.749)
+shape = SubResource("CylinderShape3D_lsqbn")
+debug_color = Color(1, 0.820313, 0, 1)
+
 [node name="AnimationTree" type="AnimationTree" parent="."]
 root_node = NodePath("../base_character")
 tree_root = SubResource("AnimationNodeBlendTree_15y17")
 anim_player = NodePath("../base_character/AnimationPlayer")
-parameters/RunBlend/blend_amount = 1.0
+parameters/AirSwamp/current_state = "Air"
+parameters/AirSwamp/transition_request = ""
+parameters/AirSwamp/current_index = 1
+parameters/RunBlend/blend_amount = 0.016652
+
+[connection signal="area_entered" from="Node3D/SpringArm3D/Area3D" to="Node3D/SpringArm3D/Area3D" method="_on_area_entered"]
+[connection signal="area_exited" from="Node3D/SpringArm3D/Area3D" to="Node3D/SpringArm3D/Area3D" method="_on_area_exited"]
 
 [editable path="base_character"]
