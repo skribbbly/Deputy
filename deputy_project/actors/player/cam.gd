@@ -26,8 +26,8 @@ func _input(event):
 		rotate_x(deg_to_rad(-event.relative.y * mouse_sensitivity))
 		rotation.x = clamp(rotation.x, deg_to_rad(-89), deg_to_rad(89))
 	
-	#if !player.target:
-	_update_arm_length()
+	if !player.state == player.TARGET:
+		_update_arm_length()
 
 func _process(delta: float) -> void:
 	player.rotation.y = get_parent().rotation.y

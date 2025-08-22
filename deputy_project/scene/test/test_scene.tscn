@@ -48,3 +48,7 @@ material = SubResource("StandardMaterial3D_tbd4o")
 
 [node name="TestTarget" parent="." instance=ExtResource("4_ag7ef")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.78911, 1.55684, 6.55897)
+
+[node name="TestTarget2" parent="." instance=ExtResource("4_ag7ef")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.403405, 1.55684, 6.55897)
+metadata/_edit_lock_ = true

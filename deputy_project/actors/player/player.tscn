@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://bbsjjf1cs1i6s"]
+[gd_scene load_steps=15 format=3 uid="uid://bbsjjf1cs1i6s"]
 
 [ext_resource type="Script" uid="uid://b3j7y2qbor4co" path="res://actors/player/player.gd" id="1_ilk7j"]
+[ext_resource type="Script" uid="uid://6eqjbpa7pbxf" path="res://actors/player/target_state.gd" id="2_6p1w3"]
 [ext_resource type="PackedScene" uid="uid://wcgvpvwq782d" path="res://assets/test_assets/base_character.gltf" id="2_ax26v"]
 [ext_resource type="Script" uid="uid://svlo13yss5vf" path="res://actors/player/cam.gd" id="3_ax26v"]
 [ext_resource type="Script" uid="uid://cvdpjsbvfevfx" path="res://actors/player/targeting_area.gd" id="4_lsqbn"]
@@ -55,12 +56,17 @@ node_connections = [&"AirSwamp", 0, &"RunBlend", &"AirSwamp", 1, &"Air", &"RunBl
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_ilk7j")
+ground_accel = 20.0
+friction = 20.0
+
+[node name="TargetState" type="Node" parent="."]
+script = ExtResource("2_6p1w3")
 
 [node name="base_character" parent="." instance=ExtResource("2_ax26v")]
 top_level = true
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="base_character/Armature/Skeleton3D" index="3"]
-transform = Transform3D(-0.824441, -0.0688922, 0.561739, -0.245087, -0.851203, -0.464096, 0.510127, -0.520295, 0.684882, 0.253404, 0.701153, -0.226402)
+transform = Transform3D(2.24827e-08, 1, 1.82539e-07, -0.999999, 1.03619e-08, 1.91503e-08, 1.2177e-07, -1.86265e-07, 1, 0.703264, 1.31288, 0.0291152)
 bone_name = "DEF-hand.R"
 bone_idx = 18
 
@@ -79,25 +85,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_lsqbn")
 debug_color = Color(1, 1, 1, 1)
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
 script = ExtResource("3_ax26v")
 min_arm_length = 1.0
 max_arm_length = 3.2
 
-[node name="SpringArm3D" type="SpringArm3D" parent="Node3D"]
+[node name="SpringArm3D" type="SpringArm3D" parent="head"]
 spring_length = 2.3
 
-[node name="Camera3D" type="Camera3D" parent="Node3D/SpringArm3D"]
+[node name="Camera3D" type="Camera3D" parent="head/SpringArm3D"]
 attributes = SubResource("CameraAttributesPhysical_ilk7j")
 
-[node name="RayCast3D" type="RayCast3D" parent="Node3D/SpringArm3D/Camera3D"]
-target_position = Vector3(0, 0, -23.5)
-
-[node name="Area3D" type="Area3D" parent="Node3D/SpringArm3D"]
+[node name="Area3D" type="Area3D" parent="head/SpringArm3D"]
 script = ExtResource("4_lsqbn")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/SpringArm3D/Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="head/SpringArm3D/Area3D"]
 transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 0, 0, 0, -11.749)
 shape = SubResource("CylinderShape3D_lsqbn")
 debug_color = Color(1, 0.820313, 0, 1)
@@ -111,7 +114,13 @@ parameters/AirSwamp/transition_request = ""
 parameters/AirSwamp/current_index = 1
 parameters/RunBlend/blend_amount = 0.016652
 
-[connection signal="area_entered" from="Node3D/SpringArm3D/Area3D" to="Node3D/SpringArm3D/Area3D" method="_on_area_entered"]
-[connection signal="area_exited" from="Node3D/SpringArm3D/Area3D" to="Node3D/SpringArm3D/Area3D" method="_on_area_exited"]
+[node name="GroundCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="CamPos" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
+
+[connection signal="area_entered" from="head/SpringArm3D/Area3D" to="." method="_on_area_3d_area_entered"]
+[connection signal="area_exited" from="head/SpringArm3D/Area3D" to="." method="_on_area_3d_area_exited"]
 
 [editable path="base_character"]

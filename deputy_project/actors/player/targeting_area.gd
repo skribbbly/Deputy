@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 
 func _on_area_entered(area: Area3D) -> void:
 	target_indi = TargetIndicator.instantiate()
-	get_parent().get_parent().add_child(target_indi)
+	get_parent().get_parent().get_parent().get_parent().add_child(target_indi)
 	target = area
 	
 
