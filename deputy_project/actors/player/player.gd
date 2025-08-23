@@ -35,6 +35,7 @@ var state : = FREE
 @export var friction := 10.1
 
 
+
 var dir : Vector3
 var mo_vec : Vector3
 var grav : Vector3
@@ -44,6 +45,12 @@ var target_list : Dictionary = {}
 var target_indi
 var target
 
+
+var can_cut := true
+@onready var mouse_free := false
+
+
+var health :int = 20
 
 
 func _process(delta: float) -> void:
@@ -83,7 +90,10 @@ func _process(delta: float) -> void:
 		target_indi.global_position = target.global_position
 	
 	if Input.is_action_pressed("esc"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		mouse_free = !mouse_free
+		set_mouse()
+	
+	
 	
 	print("FPS: ", Engine.get_frames_per_second())
 	
@@ -120,6 +130,10 @@ func _physics_process(delta: float) -> void:
 				global_position = climbray.get_collision_point()
 			else:
 				grav.y += 4
+		
+		if can_cut:
+			if Input.is_action_just_pressed("lc"):
+				attack()
 	
 	anim.set("parameters/RunBlend/blend_amount", clamp(mo_vec.length() / speed, 0.0, 1.0))
 	
@@ -127,6 +141,11 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()
 
+
+
+func attack():
+	anim.set("parameters/Attack/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	can_cut = false
 
 
 
@@ -166,3 +185,16 @@ func _on_area_3d_area_exited(area: Area3D) -> void:
 		target_list.erase(id)
 		
 		print("Erased from Target List: ", area.get_instance_id())
+
+
+
+func set_mouse():
+	if mouse_free:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _on_animation_tree_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "Cut":
+		can_cut = true

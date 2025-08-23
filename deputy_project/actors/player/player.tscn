@@ -1,10 +1,13 @@
-[gd_scene load_steps=15 format=3 uid="uid://bbsjjf1cs1i6s"]
+[gd_scene load_steps=19 format=3 uid="uid://bbsjjf1cs1i6s"]
 
 [ext_resource type="Script" uid="uid://b3j7y2qbor4co" path="res://actors/player/player.gd" id="1_ilk7j"]
 [ext_resource type="Script" uid="uid://6eqjbpa7pbxf" path="res://actors/player/target_state.gd" id="2_6p1w3"]
 [ext_resource type="PackedScene" uid="uid://wcgvpvwq782d" path="res://assets/test_assets/base_character.gltf" id="2_ax26v"]
 [ext_resource type="Script" uid="uid://svlo13yss5vf" path="res://actors/player/cam.gd" id="3_ax26v"]
-[ext_resource type="Script" uid="uid://cvdpjsbvfevfx" path="res://actors/player/targeting_area.gd" id="4_lsqbn"]
+[ext_resource type="PackedScene" uid="uid://celhtoonsitnl" path="res://game_elements/collisions/hurt_box.tscn" id="4_15y17"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bop6h"]
+size = Vector3(0.1, 0.1, 0.9)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lsqbn"]
 radius = 0.15
@@ -31,6 +34,13 @@ input_1/auto_advance = false
 input_1/break_loop_at_end = false
 input_1/reset = true
 
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bop6h"]
+filter_enabled = true
+filters = ["Armature/Skeleton3D/BoneAttachment3D/HurtBox/CollisionShape3D:disabled", "Armature/Skeleton3D:DEF-abdomen", "Armature/Skeleton3D:DEF-chest", "Armature/Skeleton3D:DEF-forearm.L", "Armature/Skeleton3D:DEF-forearm.R", "Armature/Skeleton3D:DEF-hand.L", "Armature/Skeleton3D:DEF-hand.R", "Armature/Skeleton3D:DEF-head", "Armature/Skeleton3D:DEF-neck", "Armature/Skeleton3D:DEF-upper_arm.L", "Armature/Skeleton3D:DEF-upper_arm.R"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_15y17"]
+animation = &"Cut"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ax26v"]
 animation = &"Idle"
 
@@ -39,19 +49,27 @@ animation = &"Run"
 
 [sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_ax26v"]
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_15y17"]
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_15y17"]
-graph_offset = Vector2(-586.334, 35.9252)
+graph_offset = Vector2(-723.894, -22.8906)
 nodes/Air/node = SubResource("AnimationNodeAnimation_6p1w3")
-nodes/Air/position = Vector2(-260, 280)
+nodes/Air/position = Vector2(-180, 340)
 nodes/AirSwamp/node = SubResource("AnimationNodeTransition_15y17")
 nodes/AirSwamp/position = Vector2(80, 140)
+nodes/Attack/node = SubResource("AnimationNodeOneShot_bop6h")
+nodes/Attack/position = Vector2(-300, -20)
+nodes/Cut/node = SubResource("AnimationNodeAnimation_15y17")
+nodes/Cut/position = Vector2(-760, 300)
 nodes/Idle/node = SubResource("AnimationNodeAnimation_ax26v")
-nodes/Idle/position = Vector2(-540, 20)
+nodes/Idle/position = Vector2(-780, -20)
 nodes/Run/node = SubResource("AnimationNodeAnimation_lsqbn")
-nodes/Run/position = Vector2(-540, 160)
+nodes/Run/position = Vector2(-780, 120)
 nodes/RunBlend/node = SubResource("AnimationNodeBlend2_ax26v")
-nodes/RunBlend/position = Vector2(-280, 40)
-node_connections = [&"AirSwamp", 0, &"RunBlend", &"AirSwamp", 1, &"Air", &"RunBlend", 0, &"Idle", &"RunBlend", 1, &"Run", &"output", 0, &"AirSwamp"]
+nodes/RunBlend/position = Vector2(-520, 0)
+nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_15y17")
+nodes/TimeScale/position = Vector2(-500, 240)
+node_connections = [&"AirSwamp", 0, &"Attack", &"AirSwamp", 1, &"Air", &"Attack", 0, &"RunBlend", &"Attack", 1, &"TimeScale", &"RunBlend", 0, &"Idle", &"RunBlend", 1, &"Run", &"TimeScale", 0, &"Cut", &"output", 0, &"AirSwamp"]
 
 [node name="Player" type="CharacterBody3D"]
 collision_layer = 2
@@ -59,20 +77,36 @@ script = ExtResource("1_ilk7j")
 ground_accel = 20.0
 friction = 20.0
 
+[node name="Stats" type="Node" parent="."]
+
 [node name="TargetState" type="Node" parent="."]
 script = ExtResource("2_6p1w3")
 
 [node name="base_character" parent="." instance=ExtResource("2_ax26v")]
 top_level = true
 
+[node name="Skeleton3D" parent="base_character/Armature" index="0"]
+bones/20/rotation = Quaternion(0.719887, -0.00587495, -0.0370475, -0.693077)
+bones/22/rotation = Quaternion(-0.78425, 0.128057, -0.389349, 0.46579)
+bones/24/rotation = Quaternion(0.719887, 0.00587532, 0.0370474, -0.693077)
+bones/26/rotation = Quaternion(0.78425, 0.128057, -0.389349, -0.46579)
+
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="base_character/Armature/Skeleton3D" index="3"]
-transform = Transform3D(2.24827e-08, 1, 1.82539e-07, -0.999999, 1.03619e-08, 1.91503e-08, 1.2177e-07, -1.86265e-07, 1, 0.703264, 1.31288, 0.0291152)
+transform = Transform3D(-0.637791, -0.62471, 0.450512, -0.628283, 0.0836435, -0.773475, 0.445515, -0.776364, -0.445842, 0.121287, 1.00221, -0.430279)
 bone_name = "DEF-hand.R"
 bone_idx = 18
 
 [node name="Sword" type="CSGBox3D" parent="base_character/Armature/Skeleton3D/BoneAttachment3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47847e-08, 0.0445958, -0.401157)
 size = Vector3(0.04, 0.04, 1)
+
+[node name="HurtBox" parent="base_character/Armature/Skeleton3D/BoneAttachment3D" instance=ExtResource("4_15y17")]
+
+[node name="CollisionShape3D" parent="base_character/Armature/Skeleton3D/BoneAttachment3D/HurtBox" index="0"]
+transform = Transform3D(1, 1.49012e-08, -1.49012e-08, 2.98023e-08, 1, -8.9407e-08, 5.66244e-07, -2.98023e-08, 1, -3.8743e-07, 0.0500021, -0.499999)
+shape = SubResource("BoxShape3D_bop6h")
+disabled = true
+debug_color = Color(1, 0, 0, 1)
 
 [node name="AnimationPlayer" parent="base_character" index="1"]
 autoplay = "Idle"
@@ -98,7 +132,6 @@ spring_length = 2.3
 attributes = SubResource("CameraAttributesPhysical_ilk7j")
 
 [node name="Area3D" type="Area3D" parent="head/SpringArm3D"]
-script = ExtResource("4_lsqbn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="head/SpringArm3D/Area3D"]
 transform = Transform3D(-4.37114e-08, 1, 4.37114e-08, 0, -4.37114e-08, 1, 1, 4.37114e-08, 0, 0, 0, -11.749)
@@ -109,10 +142,14 @@ debug_color = Color(1, 0.820313, 0, 1)
 root_node = NodePath("../base_character")
 tree_root = SubResource("AnimationNodeBlendTree_15y17")
 anim_player = NodePath("../base_character/AnimationPlayer")
-parameters/AirSwamp/current_state = "Air"
+parameters/AirSwamp/current_state = "Ground"
 parameters/AirSwamp/transition_request = ""
-parameters/AirSwamp/current_index = 1
-parameters/RunBlend/blend_amount = 0.016652
+parameters/AirSwamp/current_index = 0
+parameters/Attack/active = false
+parameters/Attack/internal_active = false
+parameters/Attack/request = 0
+parameters/RunBlend/blend_amount = 1.0
+parameters/TimeScale/scale = 0.5
 
 [node name="GroundCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
@@ -122,5 +159,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
 
 [connection signal="area_entered" from="head/SpringArm3D/Area3D" to="." method="_on_area_3d_area_entered"]
 [connection signal="area_exited" from="head/SpringArm3D/Area3D" to="." method="_on_area_3d_area_exited"]
+[connection signal="animation_finished" from="AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 
 [editable path="base_character"]
+[editable path="base_character/Armature/Skeleton3D/BoneAttachment3D/HurtBox"]
