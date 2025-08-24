@@ -10,10 +10,11 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_tbd4o"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_tbd4o"]
-vertices = PackedVector3Array(-15.5, -1116.8, 16, -8, -1116.8, 16, -7.6, -1116.8, 15.5, -15.5, -1116.8, -15.5, 15.5, -1116.8, 15.5, 15.5, -1116.8, -15.5)
-polygons = [PackedInt32Array(1, 0, 2), PackedInt32Array(2, 0, 3), PackedInt32Array(4, 2, 5), PackedInt32Array(5, 2, 3)]
-cell_size = 0.1
-cell_height = 0.1
+vertices = PackedVector3Array(-6.25, 0.5, -10.25, -6.25, 0.5, -15.75, -15.75, 0.5, -15.75, -15.75, 0.5, -10.25, -4, 0.5, -10, -4, 0.5, -7.75, 0.25, 0.5, -7.75, 0.5, 0.5, -4.5, 15.75, 0.5, -4.25, 15.75, 0.5, -15.75, -11.25, 2.75, -6.25, -9.75, 2.75, -6.25, -9.75, 2.5, -7, -11.25, 2.5, -7, -9.25, 2.25, -7.25, -4.75, 2, -9.75, -15.75, 2, -9.75, -11.75, 2, -7, -9, 2, -5.75, -7, 2, -5.5, -7, 2, -3.25, -4.75, 2, -3.25, -15.75, 2, -5.75, -11.75, 2, -5.75, -4, 1.25, -7.25, -4, 1.25, -3.25, -0.25, 1.25, -3.25, -0.25, 1.25, -7.25, -9.5, 3, -5.25, -11.5, 3, -5.25, -15.75, 3, 8, -7.75, 3, 8, -15.75, 3, -5.25, -7.75, 3, -5.25, -5.25, 2, 10.25, -5.25, 2, 12.75, -3, 1, 12.75, -3, 1, 10.25, 0.5, 0.5, -3, -2.75, 0.75, 13.25, -3, 0.5, 9.75, -7, 0.5, 13.5, -7, 0.5, 15.75, 15.75, 0.5, 15.75, -7, 0.5, -2.5, -7, 0.5, 9.75, 0, 0.5, -2.5, -7.5, 3, 10.25, -7.75, 3, 13, -15.75, 3, 16.25, -7.75, 3, 16.25)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1), PackedInt32Array(6, 5, 4), PackedInt32Array(4, 0, 1), PackedInt32Array(6, 4, 1), PackedInt32Array(8, 7, 6), PackedInt32Array(8, 6, 9), PackedInt32Array(9, 6, 1), PackedInt32Array(13, 12, 10), PackedInt32Array(10, 12, 11), PackedInt32Array(17, 16, 14), PackedInt32Array(14, 16, 15), PackedInt32Array(14, 12, 13), PackedInt32Array(14, 13, 17), PackedInt32Array(18, 14, 19), PackedInt32Array(19, 14, 15), PackedInt32Array(20, 19, 21), PackedInt32Array(21, 19, 15), PackedInt32Array(23, 22, 17), PackedInt32Array(17, 22, 16), PackedInt32Array(27, 26, 24), PackedInt32Array(24, 26, 25), PackedInt32Array(11, 28, 10), PackedInt32Array(10, 28, 29), PackedInt32Array(32, 29, 30), PackedInt32Array(30, 29, 31), PackedInt32Array(28, 33, 31), PackedInt32Array(29, 28, 31), PackedInt32Array(37, 36, 34), PackedInt32Array(34, 36, 35), PackedInt32Array(38, 7, 8), PackedInt32Array(39, 36, 37), PackedInt32Array(39, 37, 40), PackedInt32Array(41, 39, 42), PackedInt32Array(42, 39, 43), PackedInt32Array(45, 44, 40), PackedInt32Array(40, 44, 46), PackedInt32Array(38, 8, 39), PackedInt32Array(39, 8, 43), PackedInt32Array(46, 38, 40), PackedInt32Array(40, 38, 39), PackedInt32Array(34, 35, 47), PackedInt32Array(47, 35, 48), PackedInt32Array(31, 48, 30), PackedInt32Array(30, 48, 49), PackedInt32Array(31, 47, 48), PackedInt32Array(48, 50, 49)]
+agent_height = 1.6
+agent_radius = 0.2
+vertices_per_polygon = 4.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tbd4o"]
 albedo_texture = ExtResource("1_qhdi5")
@@ -44,10 +45,7 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.8, 
 [node name="Player" parent="." instance=ExtResource("6_tbd4o")]
 
 [node name="BoneAttachment3D" parent="Player/base_character/Armature/Skeleton3D" index="3"]
-transform = Transform3D(-0.650696, -0.672617, 0.352393, -0.651828, 0.256726, -0.71359, 0.389505, -0.69403, -0.605481, 0.0501309, 1.09092, -0.523188)
-
-[node name="CollisionShape3D" parent="Player/head/SpringArm3D/Area3D" index="0"]
-debug_fill = false
+transform = Transform3D(-0.642316, -0.365555, 0.673646, -0.465024, -0.51279, -0.721663, 0.609247, -0.776798, 0.159382, 0.188681, 0.774691, -0.206674)
 
 [node name="HurtBox" parent="." instance=ExtResource("6_fvuh8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
@@ -78,14 +76,39 @@ size = Vector3(16, 0.85, 4.5)
 material = SubResource("StandardMaterial3D_tbd4o")
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.25, 1.275, -5.25)
-size = Vector3(11.5, 0.85, 4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.25, 0.2, -6.5)
+size = Vector3(11.5, 3, 7)
 material = SubResource("StandardMaterial3D_tbd4o")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.75, -966.75, 5.5)
 size = Vector3(8.5, 1938.5, 22)
 material = SubResource("StandardMaterial3D_tbd4o")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="NavigationRegion3D/CSGCombiner3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -9.5, 1.5, -4.5)
+polygon = PackedVector2Array(0, 0, 0, 1, 1, 1, 4, 0)
+depth = 2.0
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="NavigationRegion3D/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 1.5, 13)
+polygon = PackedVector2Array(0, -2.5, 0, 1, 1, 1, 8.5, -2.5)
+depth = 3.0
+
+[node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+start_position = Vector3(-4.75, 0.5, -6)
+end_position = Vector3(-4, -0.5, -6)
+
+[node name="NavigationLink3D2" type="NavigationLink3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+start_position = Vector3(-1.45, -0.5, -3.25)
+end_position = Vector3(-1.45, -1.5, -2.5)
+
+[node name="NavigationLink3D3" type="NavigationLink3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, 0)
+start_position = Vector3(-8, 1.5, 11.5)
+end_position = Vector3(-3, -1, 11.5)
 
 [editable path="TestEnemy"]
 [editable path="TestEnemy/base_character"]

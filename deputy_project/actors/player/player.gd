@@ -37,7 +37,7 @@ var state : = FREE
 
 
 var dir : Vector3
-var mo_vec : Vector3
+var mov_vec : Vector3
 var grav : Vector3
 
 
@@ -94,7 +94,7 @@ func _process(delta: float) -> void:
 	if target_indi and target:
 		target_indi.global_position = target.global_position
 	
-	if Input.is_action_pressed("esc"):
+	if Input.is_action_just_pressed("esc"):
 		mouse_free = !mouse_free
 		set_mouse()
 	
@@ -111,9 +111,9 @@ func _physics_process(delta: float) -> void:
 	dir = Vector3(input_vec.x,0, input_vec.y).rotated(Vector3.UP, h_rot).normalized()
 	
 	if input_vec != Vector2.ZERO:
-		mo_vec = mo_vec.move_toward(dir * speed, accel * delta)
+		mov_vec = mov_vec.move_toward(dir * speed, accel * delta)
 	else:
-		mo_vec = mo_vec.move_toward(Vector3.ZERO, accel * delta)
+		mov_vec = mov_vec.move_toward(Vector3.ZERO, accel * delta)
 	
 	
 	if !is_on_floor():
@@ -142,9 +142,9 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_pressed("lc"):
 			attack()
 			
-	anim.set("parameters/RunBlend/blend_amount", clamp(mo_vec.length() / speed, 0.0, 1.0))
+	anim.set("parameters/RunBlend/blend_amount", clamp(mov_vec.length() / speed, 0.0, 1.0))
 	
-	velocity = mo_vec + grav
+	velocity = mov_vec + grav
 	
 	move_and_slide()
 
