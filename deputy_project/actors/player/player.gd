@@ -72,19 +72,24 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed("mc") and target:
 				state = TARGET
 		TARGET:
-			mesh.look_at(Vector3(target.global_position.x,global_position.y,target.global_position.z))
-			cam_root.global_position = (Vector3(global_position.x,global_position.y + 1.1,global_position.z) + target.global_position) / 2
-			spring_arm.spring_length = global_position.distance_to(cam_root.global_position) * 1.7
-			
-			anim.set("parameters/TargBlend/blend_amount", 1)
-			
-			var mesh_dir = dir.rotated(Vector3.UP, -mesh.global_transform.basis.get_euler().y).normalized()
-			
-			if Input.is_action_just_pressed("mc"):
+			if target:
+				mesh.look_at(Vector3(target.global_position.x,global_position.y,target.global_position.z))
+				cam_root.global_position = (Vector3(global_position.x,global_position.y + 1.1,global_position.z) + target.global_position) / 2
+				spring_arm.spring_length = global_position.distance_to(cam_root.global_position) * 1.7
+				
+				anim.set("parameters/TargBlend/blend_amount", 1)
+				
+				var mesh_dir = dir.rotated(Vector3.UP, -mesh.global_transform.basis.get_euler().y).normalized()
+				
+				if Input.is_action_just_pressed("mc"):
+					cam_root.global_position = cam_pos.global_position
+					spring_arm.spring_length = 2.3
+					state = FREE
+			else:
 				cam_root.global_position = cam_pos.global_position
 				spring_arm.spring_length = 2.3
 				state = FREE
-	
+		
 	
 	if target_indi and target:
 		target_indi.global_position = target.global_position
@@ -95,7 +100,7 @@ func _process(delta: float) -> void:
 	
 	
 	
-	print("FPS: ", Engine.get_frames_per_second())
+	#print("FPS: ", Engine.get_frames_per_second())
 	
 
 func _physics_process(delta: float) -> void:
@@ -131,10 +136,12 @@ func _physics_process(delta: float) -> void:
 			else:
 				grav.y += 4
 		
-		if can_cut:
-			if Input.is_action_just_pressed("lc"):
-				attack()
 	
+	
+	if can_cut:
+		if Input.is_action_just_pressed("lc"):
+			attack()
+			
 	anim.set("parameters/RunBlend/blend_amount", clamp(mo_vec.length() / speed, 0.0, 1.0))
 	
 	velocity = mo_vec + grav
