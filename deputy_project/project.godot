@@ -8,10 +8,16 @@
 
 config_version=5
 
+[ambientcg]
+
+extract_path="res://AmbientCG/Downloads"
+material_file_directory="res://AmbientCG/Materials"
+environment_file_directory="res://AmbientCG/Environments"
+
 [application]
 
 config/name="deputy_project"
-run/main_scene="uid://dfar43u6ar1yl"
+run/main_scene="uid://duan3agegdkpm"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -23,6 +29,10 @@ window/size/viewport_height=800
 [dotnet]
 
 project/assembly_name="deputy_project"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/ambientcg/plugin.cfg", "res://addons/terrain_3d/plugin.cfg")
 
 [global_group]
 

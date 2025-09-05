@@ -53,6 +53,10 @@ var can_cut := true
 var health :int = 20
 
 
+func _ready() -> void:
+	mesh.top_level = true
+
+
 func _process(delta: float) -> void:
 	mesh.global_position = global_position
 	
@@ -119,7 +123,7 @@ func _physics_process(delta: float) -> void:
 	if !is_on_floor():
 		grav.y -= 9.8 * delta
 		anim.set("parameters/AirSwamp/transition_request", "Air")
-		col.shape.height = 1.1
+		#col.shape.height = 1.1
 		if climbray.is_colliding():
 			if Input.is_action_just_pressed("space"):
 				global_position = climbray.get_collision_point()
@@ -127,9 +131,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		grav.y = 0
 		anim.set("parameters/AirSwamp/transition_request", "Ground")
-		if col.shape.height == 1.1:
-			global_position.y = ground_cast.get_collision_point().y
-		col.shape.height = 1.6
 		if Input.is_action_just_pressed("space"):
 			if climbray.is_colliding():
 				global_position = climbray.get_collision_point()
